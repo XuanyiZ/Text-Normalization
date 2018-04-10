@@ -1,1 +1,3 @@
 electron-twitter-master/node_modules/
+.vscode/
+__pycache__/
