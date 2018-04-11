@@ -19,3 +19,10 @@ def generateMap(tweets):
         index_map[key] = {k: JaccardIndex(k, key) for k in values}
         print(("%d %s: %s ; " % (support_map[key], key, values)) + str(confidence_map[key].items()) + str(index_map[key]))
     return static_map, support_map, confidence_map, index_map
+
+def generateInitialPOSConfidence(tweets):
+    serialized = '\n'.join([' '.join(words['input']) for words in tweets])
+    print(serialized)
+
+def generateModifiedTweet(tweets, maps):
+    static_map, support_map, confidence_map, index_map = maps

@@ -1,3 +1,4 @@
 electron-twitter-master/node_modules/
 .vscode/
 __pycache__/
+.DS_Store
