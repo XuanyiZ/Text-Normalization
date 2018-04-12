@@ -1,8 +1,9 @@
 import json
-from generate_feature import generateMap, generateInitialPOSConfidence
+from generate_feature import generateMap, generatePOSConfidence
 
 jsonfile = open('lexnorm2015/train_data.json', 'r')
-tweets = json.load(jsonfile)
+rawtweets = json.load(jsonfile)
 jsonfile.close()
 
-generateInitialPOSConfidence(tweets)
+tweets = generatePOSConfidence(rawtweets)
+print(generateMap(tweets))
