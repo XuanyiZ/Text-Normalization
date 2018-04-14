@@ -1,0 +1,42 @@
+[
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "tttt",
+            "mmmm"
+        ]
+    },
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "abttc",
+            "dmmef"
+        ]
+    },
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "ttcdetffffftt",
+            "mmgbhmiiiiimm"
+        ]
+    },
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "wttte",
+            "xmmmy"
+        ]
+    }
+]

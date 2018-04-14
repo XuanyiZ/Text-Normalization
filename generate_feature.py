@@ -19,9 +19,8 @@ def generateMap(tweets):
                 confidence_map[input_word][output_word] += 1
             support_map[input_word] += 1
     for key, values in static_map.items():
-        confidence_map[key] = {k: v / support_map[key] for k, v in confidence_map[key].items()}
         index_map[key] = {k: JaccardIndex(k, key) for k in values}
-        print(("%d %s: %s ; " % (support_map[key], key, values)) + str(confidence_map[key].items()) + str(index_map[key]))
+        # print(("%d %s: %s ; " % (support_map[key], key, values)) + str(confidence_map[key]) + str(index_map[key]))
     return static_map, support_map, confidence_map, index_map
 
 def generatePOSConfidence(tweets, containOutput=False):
@@ -53,8 +52,7 @@ def generatePOSConfidence(tweets, containOutput=False):
             print(row)
             drop += 1
             continue
-        assert len(tag) == len(prob) and len(tag) == len(tweet), 'Wrong length'
-        newtweet = {'mean': np.mean(prob), 'tag': tag, 'prob': prob, 'input': tweet,}
+        newtweet = {'mean': np.mean(prob), 'prob': prob, 'tag': tag, 'input': tweet}
         if containOutput:
             newtweet['output'] = norm_tweet
         mappedTweets.append(newtweet)
@@ -62,9 +60,61 @@ def generatePOSConfidence(tweets, containOutput=False):
     print('Dropped %d' % drop)
     return mappedTweets
 
-def generateCandidates(mappedTweets, maps):
+def generateCandidates(mappedTweets, maps, isTraining=True):
     # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
     static_map, support_map, confidence_map, index_map = maps
+    candidates = []
+    for tweet in mappedTweets:
+        idx = 0
+        for token in tweet['input']:
+            right = ''
+            if isTraining:
+                right = tweet['output'][idx]
+            sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
+            candidates.append({
+                'idx': idx, 
+                'feature': [support_map[token], 
+                            1 - sum_canonical_occurence / support_map[token], 
+                            1.0, 
+                            len(token), 
+                            len(token), 
+                            0.0,
+                            tweet['mean'], 
+                            tweet['prob'][idx],
+                            '',
+                            ''], 
+                'input': [t for t in tweet['input']], 
+                'label': 1 if token == right else 0})
+            for canonical in static_map[token]:
+                candidates.append({
+                    'idx': idx, 
+                    'feature': [support_map[token], 
+                                confidence_map[token][canonical], 
+                                index_map[token][canonical], 
+                                len(token), 
+                                len(canonical), 
+                                len(canonical) - len(token),
+                                tweet['mean'], 
+                                tweet['prob'][idx],
+                                '',
+                                ''], 
+                    'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])], 
+                    'label': 1 if canonical == right else 0})
+            idx += 1
+    return candidates
 
-def generateModifiedTweet(tweets, maps):
-    static_map, support_map, confidence_map, index_map = maps
+def generateFeatureVectors(candidateTweets, TaggedTweets):
+    assert len(candidateTweets) == len(TaggedTweets), 'Not matching in length, cannot compose'
+    training = []
+    label = []
+    for (ctweet, ttweet) in zip(candidateTweets, TaggedTweets):
+        idx = ctweet['idx']
+        feature = ctweet['feature']
+        feature[6] = ttweet['mean'] - feature[6]
+        feature[7] = ttweet['prob'][idx] - feature[7]
+        if idx > 0:
+            feature[8] = ttweet['tag'][idx - 1]
+        feature[9] = ttweet['tag'][idx]
+        training.append(feature)
+        label.append(ctweet['label'])
+    return training, label
