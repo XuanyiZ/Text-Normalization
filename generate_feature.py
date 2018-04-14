@@ -36,6 +36,7 @@ def generatePOSConfidence(tweets, containOutput=False):
     tsv = csv.reader(open('tagged.txt', 'r'), delimiter='\t')
     idx = 0
     drop = 0
+    originalTweets = []
     mappedTweets = []
     for row in tsv:
         if (len(row) < 4):
@@ -46,19 +47,19 @@ def generatePOSConfidence(tweets, containOutput=False):
         norm_tweet = None
         if containOutput:
             norm_tweet = tweets[idx]['output']
-        idx += 1
         if not (len(tag) == len(prob) and len(tag) == len(tweet)):
-            print(tweet)
-            print(row)
             drop += 1
+            idx += 1
             continue
         newtweet = {'mean': np.mean(prob), 'prob': prob, 'tag': tag, 'input': tweet}
         if containOutput:
             newtweet['output'] = norm_tweet
         mappedTweets.append(newtweet)
+        originalTweets.append(tweets[idx])
+        idx += 1
     os.remove('tagged.txt')
     print('Dropped %d' % drop)
-    return mappedTweets
+    return originalTweets, mappedTweets
 
 def generateCandidates(mappedTweets, maps, isTraining=True):
     # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
