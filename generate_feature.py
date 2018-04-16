@@ -24,9 +24,9 @@ def generateMap(tweets):
     return static_map, support_map, confidence_map, index_map
 
 def generatePOSConfidence(tweets, containOutput=False):
-    serialized = '\n'.join([' '.join(words['input']) for words in tweets])
+    serialized = [' '.join(words['input']) for words in tweets]
     file = open('tmp.txt', 'w')
-    file.write(serialized)
+    file.write('\n'.join(serialized))
     file.close()
     result = subprocess.check_output(('./ark-tweet-nlp-0.3.2/runTagger.sh', './tmp.txt')).decode('utf-8')
     os.remove('tmp.txt')
@@ -47,7 +47,7 @@ def generatePOSConfidence(tweets, containOutput=False):
         norm_tweet = None
         if containOutput:
             norm_tweet = tweets[idx]['output']
-        if not (len(tag) == len(prob) and len(tag) == len(tweet)):
+        if len(tweet) > len(tag)
             drop += 1
             idx += 1
             continue
@@ -68,9 +68,10 @@ def generateCandidates(mappedTweets, maps, isTraining=True):
     for tweet in mappedTweets:
         idx = 0
         for token in tweet['input']:
+            token = token.lower()
             right = ''
             if isTraining:
-                right = tweet['output'][idx]
+                right = tweet['output'][idx].lower()
             sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
             candidates.append({
                 'idx': idx, 

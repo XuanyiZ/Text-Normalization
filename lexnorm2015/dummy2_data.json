@@ -1,0 +1,32 @@
+[
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "tttt",
+            "mmmm"
+        ]
+    },
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "aatt taa",
+            "bbmm mbb"
+        ]
+    },
+    {
+        "input": [
+            "tttt",
+            "mmmm"
+        ],
+        "output": [
+            "aatt ttaa tctc",
+            "bbmm mmbb mdmd"
+        ]
+    }
+]
