@@ -24,9 +24,9 @@ def generateMap(tweets):
     return static_map, support_map, confidence_map, index_map
 
 def generatePOSConfidence(tweets, containOutput=False):
-    serialized = [' '.join(words['input']) for words in tweets]
+    serialized = '\n'.join([' '.join(words['input']) for words in tweets])
     file = open('tmp.txt', 'w')
-    file.write('\n'.join(serialized))
+    file.write(serialized)
     file.close()
     result = subprocess.check_output(('./ark-tweet-nlp-0.3.2/runTagger.sh', './tmp.txt')).decode('utf-8')
     os.remove('tmp.txt')
@@ -44,16 +44,21 @@ def generatePOSConfidence(tweets, containOutput=False):
         tag = row[1].split()
         prob = np.array(list(map(float, row[2].split())))
         tweet = list(map(str.lower, tweets[idx]['input']))
-        norm_tweet = None
-        if containOutput:
-            norm_tweet = tweets[idx]['output']
-        if len(tweet) > len(tag)
+        if len(' '.join(tweet).split()) != len(tag):
             drop += 1
             idx += 1
             continue
-        newtweet = {'mean': np.mean(prob), 'prob': prob, 'tag': tag, 'input': tweet}
+        inner_idx = 0
+        newProb = []
+        newTag = []
+        for token in tweet:
+            token_len = len(token.split())
+            newProb.append(np.mean(prob[inner_idx:inner_idx + token_len]))
+            newTag.append(tag[inner_idx])
+            inner_idx += token_len
+        newtweet = {'mean': np.mean(prob), 'prob': newProb, 'tag': newTag, 'input': tweet}
         if containOutput:
-            newtweet['output'] = norm_tweet
+            newtweet['output'] = tweets[idx]['output']
         mappedTweets.append(newtweet)
         originalTweets.append(tweets[idx])
         idx += 1
