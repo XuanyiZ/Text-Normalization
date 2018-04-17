@@ -21,7 +21,7 @@ def generateMap(tweets):
     for key, values in static_map.items():
         index_map[key] = {k: JaccardIndex(k, key) for k in values}
         # print(("%d %s: %s ; " % (support_map[key], key, values)) + str(confidence_map[key]) + str(index_map[key]))
-    return static_map, support_map, confidence_map, index_map
+    return dict(static_map), dict(support_map), {k: dict(v) for k, v in confidence_map.items()}, {k: dict(v) for k, v in index_map.items()}
 
 def generatePOSConfidence(tweets, containOutput=False):
     serialized = '\n'.join([' '.join(words['input']) for words in tweets])
@@ -77,36 +77,37 @@ def generateCandidates(mappedTweets, maps, isTraining=True):
             right = ''
             if isTraining:
                 right = tweet['output'][idx].lower()
-            sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
-            candidates.append({
-                'idx': idx, 
-                'feature': [support_map[token], 
-                            1 - sum_canonical_occurence / support_map[token], 
-                            1.0, 
-                            len(token), 
-                            len(token), 
-                            0.0,
-                            tweet['mean'], 
-                            tweet['prob'][idx],
-                            '',
-                            ''], 
-                'input': [t for t in tweet['input']], 
-                'label': 1 if token == right else 0})
-            for canonical in static_map[token]:
-                candidates.append({
-                    'idx': idx, 
-                    'feature': [support_map[token], 
-                                confidence_map[token][canonical], 
-                                index_map[token][canonical], 
-                                len(token), 
-                                len(canonical), 
-                                len(canonical) - len(token),
-                                tweet['mean'], 
-                                tweet['prob'][idx],
-                                '',
-                                ''], 
-                    'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])], 
-                    'label': 1 if canonical == right else 0})
+            # sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
+            # candidates.append({
+            #     'idx': idx, 
+            #     'feature': [support_map[token], 
+            #                 1 - sum_canonical_occurence / support_map[token], 
+            #                 1.0, 
+            #                 len(token), 
+            #                 len(token), 
+            #                 0.0,
+            #                 tweet['mean'], 
+            #                 tweet['prob'][idx],
+            #                 '',
+            #                 ''], 
+            #     'input': [t for t in tweet['input']], 
+            #     'label': 1 if token == right else 0})
+            if token in static_map:
+                for canonical in static_map[token]:
+                    candidates.append({
+                        'idx': idx, 
+                        'feature': [support_map[token], 
+                                    confidence_map[token][canonical], 
+                                    index_map[token][canonical], 
+                                    len(token), 
+                                    len(canonical), 
+                                    len(canonical) - len(token),
+                                    tweet['mean'], 
+                                    tweet['prob'][idx],
+                                    '',
+                                    ''], 
+                        'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])], 
+                        'label': 1 if canonical == right else 0})
             idx += 1
     return candidates
 
