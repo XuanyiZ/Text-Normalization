@@ -66,35 +66,22 @@ def generatePOSConfidence(tweets, containOutput=False):
     print('Dropped %d' % drop)
     return originalTweets, mappedTweets
 
-def generateCandidates(mappedTweets, maps, isTraining=True):
+def generateTrainingCandidates(mappedTweets, maps, includeSelf=False):
     # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
     static_map, support_map, confidence_map, index_map = maps
     candidates = []
+    tweet_idx
     for tweet in mappedTweets:
         idx = 0
         for token in tweet['input']:
             token = token.lower()
             right = ''
-            if isTraining:
+            if 'output' in tweet:
                 right = tweet['output'][idx].lower()
-            # sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
-            # candidates.append({
-            #     'idx': idx, 
-            #     'feature': [support_map[token], 
-            #                 1 - sum_canonical_occurence / support_map[token], 
-            #                 1.0, 
-            #                 len(token), 
-            #                 len(token), 
-            #                 0.0,
-            #                 tweet['mean'], 
-            #                 tweet['prob'][idx],
-            #                 '',
-            #                 ''], 
-            #     'input': [t for t in tweet['input']], 
-            #     'label': 1 if token == right else 0})
             if token in static_map:
                 for canonical in static_map[token]:
                     candidates.append({
+                        'tweet_idx': tweet_idx,
                         'idx': idx, 
                         'feature': [support_map[token], 
                                     confidence_map[token][canonical], 
@@ -109,6 +96,106 @@ def generateCandidates(mappedTweets, maps, isTraining=True):
                         'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])], 
                         'label': 1 if canonical == right else 0})
             idx += 1
+        tweet_idx += =1
+    return candidates
+
+def isRepetitive(token):
+    for i in range(len(token) - 2):
+        if token[i] == token[i + 1] and token[i + 1] == token[i + 2]:
+            return True
+    return False
+
+def generateCandidates(mappedTweets, maps, includeSelf=False, constrained=True):
+    # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
+    static_map, support_map, confidence_map, index_map = maps
+    candidates = []
+    tweet_idx
+    for tweet in mappedTweets:
+        idx = 0
+        for token in tweet['input']:
+            token = token.lower()
+            if includeSelf:
+                tmp_support = 0
+                tmp_confidence = 0
+                if token in static_map:
+                    tmp_support = support_map[token]
+                    sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
+                    tmp_confidence = 1 - sum_canonical_occurence / support_map[token]
+                else
+                    if token in support_map:
+                        tmp_support = support_map[token]
+                        tmp_confidence = 1.0
+                    else:
+                        tmp_support = 0.0
+                        tmp_confidence = 1.0
+                candidates.append({
+                    'tweet_idx': tweet_idx,
+                    'idx': idx, 
+                    'feature': [tmp_support, 
+                                tmp_confidence, 
+                                1.0, 
+                                len(token), 
+                                len(token), 
+                                0.0,
+                                tweet['mean'], 
+                                tweet['prob'][idx],
+                                '',
+                                ''], 
+                    'input': [t for t in tweet['input']]})
+            if token in static_map:
+                sorted_index = sorted(((v, k) for k, v in index_map[token].items()), reverse=True)
+                if constrained:
+                    for canonical in static_map[token]:
+                        if len(canonical.split()) > 1:
+                            candidates.append({
+                                'tweet_idx': tweet_idx,
+                                'idx': idx, 
+                                'feature': [support_map[token], 
+                                            confidence_map[token][canonical], 
+                                            index_map[token][canonical], 
+                                            len(token), 
+                                            len(canonical), 
+                                            len(canonical) - len(token),
+                                            tweet['mean'], 
+                                            tweet['prob'][idx],
+                                            '',
+                                            ''], 
+                                'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])]})
+                        else:
+                            if isRepetitive(token):
+                                candidates.append({
+                                    'tweet_idx': tweet_idx,
+                                    'idx': idx, 
+                                    'feature': [support_map[token], 
+                                                confidence_map[token][canonical], 
+                                                index_map[token][canonical], 
+                                                len(token), 
+                                                len(canonical), 
+                                                len(canonical) - len(token),
+                                                tweet['mean'], 
+                                                tweet['prob'][idx],
+                                                '',
+                                                ''], 
+                                    'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])]})
+                else:
+                    for i in range(min(len(sorted_index), 3)):
+                        sim, canonical = sorted_index[i]
+                        candidates.append({
+                            'tweet_idx': tweet_idx,
+                            'idx': idx, 
+                            'feature': [support_map[token], 
+                                        confidence_map[token][canonical], 
+                                        index_map[token][canonical], 
+                                        len(token), 
+                                        len(canonical), 
+                                        len(canonical) - len(token),
+                                        tweet['mean'], 
+                                        tweet['prob'][idx],
+                                        '',
+                                        ''], 
+                            'input': [t if i != idx else canonical for (i, t) in enumerate(tweet['input'])]})
+            idx += 1
+        tweet_idx += =1
     return candidates
 
 def generateFeatureVectors(candidateTweets, TaggedTweets):

@@ -1,7 +1,7 @@
 import json
 import pickle
 from collections import defaultdict
-from generate_feature import generateMap, generatePOSConfidence, generateCandidates, generateFeatureVectors
+from generate_feature import generateMap, generatePOSConfidence, generateTrainingCandidates, generateCandidates, generateFeatureVectors
 
 jsonfile = open('lexnorm2015/train_data.json', 'r')
 rawtweets = json.load(jsonfile)
@@ -14,7 +14,7 @@ maps = generateMap(rawtweets)
 print('Generated static map')
 _, tweets = generatePOSConfidence(rawtweets, True)
 print('Tagged primary tweets')
-candidateTweets = generateCandidates(tweets, maps)
+candidateTweets = generateTrainingCandidates(tweets, maps)
 print('Candidates are enumerated')
 notDroppedTweets, featureTweets = generatePOSConfidence(candidateTweets)
 print('Tagged all candidate tweets')
