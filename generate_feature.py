@@ -78,6 +78,35 @@ def generateTrainingCandidates(mappedTweets, maps, includeSelf=False):
             right = ''
             if 'output' in tweet:
                 right = tweet['output'][idx].lower()
+            if includeSelf:
+                tmp_support = 0
+                tmp_confidence = 0
+                if token in static_map:
+                    tmp_support = support_map[token]
+                    sum_canonical_occurence = np.sum([v for k, v in confidence_map[token].items()])
+                    tmp_confidence = 1 - sum_canonical_occurence / support_map[token]
+                else
+                    if token in support_map:
+                        tmp_support = support_map[token]
+                        tmp_confidence = 1.0
+                    else:
+                        tmp_support = 0.0
+                        tmp_confidence = 1.0
+                candidates.append({
+                    'tweet_idx': tweet_idx,
+                    'idx': idx, 
+                    'feature': [tmp_support, 
+                                tmp_confidence, 
+                                1.0, 
+                                len(token), 
+                                len(token), 
+                                0.0,
+                                tweet['mean'], 
+                                tweet['prob'][idx],
+                                '',
+                                ''], 
+                    'input': [t for t in tweet['input']], 
+                    'label': 1 if token == right else 0})
             if token in static_map:
                 for canonical in static_map[token]:
                     candidates.append({
