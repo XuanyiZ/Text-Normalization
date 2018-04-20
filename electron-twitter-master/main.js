@@ -8,11 +8,11 @@ var Twitter = require("twitter");
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
 
-process.env.TWITTER_CONSUMER_KEY = "20vKQdKcxCwEDySN5CKrAg1vs"
-process.env.TWITTER_CONSUMER_SECRET = "rrVsGMOOH0SS2LLWWejHQj2G6QTVWCJk61PYt49m9LX0Nugi1p"
-process.env.TWITTER_TOKEN_KEY = "1461876012-JOpd4PBU95wF2WGuy7LJKBlBZvtbHI4TxpgYget"
-process.env.TWITTER_TOKEN_SECRET = "jpiJLj8JStwCT4UppWpKGUMwWCZiOKN0YSmICEWoB8Ock"
-process.env.TWITTER_USER = "hrukalive"
+process.env.TWITTER_CONSUMER_KEY = ""
+process.env.TWITTER_CONSUMER_SECRET = ""
+process.env.TWITTER_TOKEN_KEY = ""
+process.env.TWITTER_TOKEN_SECRET = ""
+process.env.TWITTER_USER = ""
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
