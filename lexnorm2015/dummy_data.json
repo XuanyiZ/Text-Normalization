@@ -1,17 +1,7 @@
 [
     {
         "input": [
-            "tttt",
-            "mmmm"
-        ],
-        "output": [
-            "tttt",
-            "mmmm"
-        ]
-    },
-    {
-        "input": [
-            "tttt",
+            "ttff",
             "mmmm"
         ],
         "output": [
@@ -21,7 +11,7 @@
     },
     {
         "input": [
-            "tttt",
+            "ttff",
             "mmmm"
         ],
         "output": [
@@ -31,12 +21,32 @@
     },
     {
         "input": [
-            "tttt",
+            "ttff",
             "mmmm"
         ],
         "output": [
             "wttte",
             "xmmmy"
+        ]
+    },
+    {
+        "input": [
+            "ttff",
+            "mmmm"
+        ],
+        "output": [
+            "aaaaa",
+            "bbbbb"
+        ]
+    },
+    {
+        "input": [
+            "ttff",
+            "mmmm"
+        ],
+        "output": [
+            "ccc cc",
+            "ddd dd"
         ]
     }
 ]
