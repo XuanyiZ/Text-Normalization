@@ -1,6 +1,7 @@
 def generateFeatureVectors(candidateTweets, TaggedTweets):
     assert len(candidateTweets) == len(TaggedTweets), 'Not matching in length, cannot compose'
     category = []
+    token = []
     training = []
     label = []
     for (ctweet, ttweet) in zip(candidateTweets, TaggedTweets):
@@ -14,4 +15,5 @@ def generateFeatureVectors(candidateTweets, TaggedTweets):
         training.append(feature)
         label.append(ctweet['label'])
         category.append(ctweet['category'])
-    return category, training, label
+        token.append(ctweet['token'])
+    return category, token, training, label
