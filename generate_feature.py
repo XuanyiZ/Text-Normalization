@@ -1,5 +1,7 @@
 def generateFeatureVectors(candidateTweets, TaggedTweets):
     assert len(candidateTweets) == len(TaggedTweets), 'Not matching in length, cannot compose'
+    tweet_id = []
+    indices = []
     category = []
     token = []
     training = []
@@ -12,8 +14,10 @@ def generateFeatureVectors(candidateTweets, TaggedTweets):
         if idx > 0:
             feature[8] = ttweet['tag'][idx - 1]
         feature[9] = ttweet['tag'][idx]
+        indices.append(idx)
+        tweet_id.append(ctweet['tweet_idx'])
         training.append(feature)
         label.append(ctweet['label'])
         category.append(ctweet['category'])
         token.append(ctweet['token'])
-    return category, token, training, label
+    return tweet_id, indices, category, token, training, label
