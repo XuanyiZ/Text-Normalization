@@ -13,7 +13,8 @@ if __name__ == '__main__':
     mappedTweet = initWithPOS([tweet])
     candidateTweets = generateCandidates(mappedTweet, maps, True, False)
     notDroppedTweets, featureTweets = generatePOSConfidence(candidateTweets)
-    categories, tokens, features, _ = generateFeatureVectors(notDroppedTweets, featureTweets)
-    print('\n'.join([c + ' ' + t + ' ' + str(f) for (c, t, f) in zip(categories, tokens, features)]))
+    tweet_idx, indices, categories, tokens, features, _ = generateFeatureVectors(notDroppedTweets, featureTweets)
+    print('\n'.join([str(i) + ' ' + str(j) + ' ' + c + ' ' + t + ' ' + str(f) for (i, j, c, t, f) 
+                        in zip(tweet_idx, indices, categories, tokens, features)]))
     # TODO using 'features' to classify, categories may help. Substitute the highest probability one with token
     #      and ' '.join them to form a new tweet.
