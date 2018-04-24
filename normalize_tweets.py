@@ -6,9 +6,10 @@ from generate_pos_info import *
 from generate_candidate import *
 from generate_feature import *
 
+with open('mapping_unconstrained', 'rb') as fp:
+    maps = pickle.load(fp)
+
 def mapATweet(tweet):
-    with open('mapping_unconstrained', 'rb') as fp:
-        maps = pickle.load(fp)
     mappedTweet = initWithPOS([tweet])
     candidateTweets = generateCandidates(mappedTweet, maps, True, False)
     notDroppedTweets, featureTweets = generatePOSConfidence(candidateTweets)
@@ -21,4 +22,3 @@ def mapATweet(tweet):
 if __name__ == '__main__':
     tweet = input()
     mapATweet(tweet)
-    
