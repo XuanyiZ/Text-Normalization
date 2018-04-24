@@ -6,8 +6,7 @@ from generate_pos_info import *
 from generate_candidate import *
 from generate_feature import *
 
-if __name__ == '__main__':
-    tweet = input()
+def mapATweet(tweet):
     with open('mapping_unconstrained', 'rb') as fp:
         maps = pickle.load(fp)
     mappedTweet = initWithPOS([tweet])
@@ -18,3 +17,8 @@ if __name__ == '__main__':
                         in zip(tweet_idx, indices, categories, tokens, features)]))
     # TODO using 'features' to classify, categories may help. Substitute the highest probability one with token
     #      and ' '.join them to form a new tweet.
+
+if __name__ == '__main__':
+    tweet = input()
+    mapATweet(tweet)
+    
