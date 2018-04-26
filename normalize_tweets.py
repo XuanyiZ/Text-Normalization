@@ -16,14 +16,14 @@ def mapATweet(tweet):
     candidateTweets = generateCandidates(mappedTweet, maps, True, False)
     notDroppedTweets, featureTweets = generatePOSConfidence(candidateTweets)
     dataset = generateFeatureVectors(notDroppedTweets, featureTweets)
-    tweet_idx, indices, categories, tokens, features, labels = dataset
+    tweet_idx, indices, categories, tokens, features, labels = map(np.array, dataset)
     print('\n'.join([str(i) + ' ' + str(j) + ' ' + c + ' ' + t + ' ' + str(f) for (i, j, c, t, f) 
                         in zip(tweet_idx, indices, categories, tokens, features)]))
-    # TODO using 'features' to classify, categories may help. Substitute the highest probability one with token
-    #      and ' '.join them to form a new tweet.
+
     group_ix, tokens, features, labels = load_dataset(tweet_idx,indices, tokens, features, labels)
     model = load_model()
     predicted = model.predict(group_ix, features)
+    print(tokens[predicted])
     return list(tokens[predicted]) # the result
 
 if __name__ == '__main__':

@@ -11,6 +11,7 @@ class Predictor():
 
     def fit(self, features, labels):
         self.classifier.fit(features, labels)
+        return self
 
     def predict(self, group_ix, features):
         """

@@ -43,8 +43,3 @@ def save_model(model, file_name='model_trained'):
 def load_model(file_name='model_trained'):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
-
-# test
-# if __name__ == '__main__':
-#     training_dataset = load_dataset_from_file('testing_constrained')
-
