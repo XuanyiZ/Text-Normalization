@@ -3,10 +3,6 @@
     <head>
         <title>Hello Twitter!</title>
         <script>
-            // Going with stupidly simple way of just hammering the content
-            // into the DOM without any proper data management as it's a simple
-            // hello world example
-
             var { ipcRenderer } = require("electron");
 
             ipcRenderer.on("tweets", function(tweets) {

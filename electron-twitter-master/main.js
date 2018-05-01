@@ -8,11 +8,11 @@ var Twitter = require("twitter");
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
 
-process.env.TWITTER_CONSUMER_KEY = ""
-process.env.TWITTER_CONSUMER_SECRET = ""
-process.env.TWITTER_TOKEN_KEY = ""
-process.env.TWITTER_TOKEN_SECRET = ""
-process.env.TWITTER_USER = ""
+process.env.TWITTER_CONSUMER_KEY = "RATlQLeHrNY17mTuEL3eMEM3c"
+process.env.TWITTER_CONSUMER_SECRET = "JWR6DEWyjOmvAFOIeglcHDEWv4olCzauMH59pBFWDa2bkZkSdg"
+process.env.TWITTER_TOKEN_KEY = "988901359511580673-6HVb7DimhqR1VXSpI6VEB5D37ULw3HJ"
+process.env.TWITTER_TOKEN_SECRET = "ZYrglSdFN9HE1sSb3BU0UUt5fHtGeRDsamRnehxQy58dO"
+process.env.TWITTER_USER = "TestNormalizer"
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
@@ -31,46 +31,46 @@ app.on("ready", function() {
         uploadToServer: false
       });
 
-    var client = new Twitter({
+    let client = new Twitter({
         consumer_key: process.env.TWITTER_CONSUMER_KEY,
         consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
         access_token_key: process.env.TWITTER_TOKEN_KEY,
         access_token_secret: process.env.TWITTER_TOKEN_SECRET
     });
     
-    var params = {
-        screen_name: process.env.TWITTER_USER || "hrukalive"
+    let params = {
+        with: 'followings',
+        include_rts: 'false',
+        extended_tweet: true
     };
+
+    client.stream('user', params, (stream) => {
+        console.log(stream)
+        stream.on('data', (tweet) => {
+            console.log(tweet)
+        })
+    });
     
     ipcMain.on('readTwitter', (event) => {
         // Query twitter for feed information
-        client.get("statuses/user_timeline", params, function(error, tweets, response) {
+        client.get("statuses/filter.json", params, function(error, tweets, response) {
             if (error) {
                 console.log(error);
                 return;
             }
-
-            var textContentOfTweets = tweets.map(function(t) { return { text: t.text, user: t.user.screen_name }; });
+            var textContentOfTweets = tweets.map(t => { return { text: t.text, user: t.user.screen_name } });
             console.log(textContentOfTweets);
             event.sender.send("tweets", textContentOfTweets);
         });
     });
 
-    // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600
     });
 
-    // and load the index.html of the app.
     mainWindow.loadURL("file://" + __dirname + "/index.html");
-    // Emitted when the window is closed.
     mainWindow.on("closed", function() {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
         mainWindow = null;
     });
-
-    // readTwitter.read(mainWindow);
 });
