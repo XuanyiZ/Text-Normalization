@@ -1,8 +1,8 @@
 {
-  "name": "twimalizer",
-  "productName": "twimalizer",
+  "name": "Twitter Normalizer",
+  "productName": "Twitter Normalizer",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "CS 410 Final Project - Text Normalizer applied on Twitter",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -12,7 +12,7 @@
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
-  "author": "bowen",
+  "author": "dsun18, xzhu42, twu54",
   "license": "MIT",
   "config": {
     "forge": {
@@ -32,17 +32,17 @@
         "packageManager": "npm"
       },
       "electronWinstallerConfig": {
-        "name": "twimalizer"
+        "name": "Twimalizer"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "dsun18",
+        "name": "https://gitlab.textdata.org/dsun18/cs410project"
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "twimalizer"
+        "name": "Twimalizer"
       }
     }
   },
@@ -50,8 +50,6 @@
     "electron-compile": "^6.4.2",
     "electron-devtools-installer": "^2.2.3",
     "electron-squirrel-startup": "^1.0.0",
-    "python-shell": "^0.5.0",
-    "request-debug": "^0.2.0",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-vue": "^0.2.8",
     "twitter": "^1.7.1",

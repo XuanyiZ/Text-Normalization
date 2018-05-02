@@ -8,9 +8,19 @@ from generate_feature import *
 
 print('=============TRAINING SET GENERATION=============')
 # Generate Training dataset
-jsonfile = open('lexnorm2015/train_data.json', 'r')
-rawtweets = json.load(jsonfile)
-jsonfile.close()
+rawtweets = []
+try:
+    jsonfile = open('lexnorm2015/train_data.json', 'r')
+    rawtweets.append(json.load(jsonfile))
+finally:
+    jsonfile.close()
+try:
+    jsonfile = open('twimalizer/augmentData.json', 'r')
+    rawtweets.append(json.load(jsonfile))
+except:
+    pass
+finally:
+    jsonfile.close()
 
 constrained_maps = generateMap(rawtweets)
 maps = consolidateMap(constrained_maps)
@@ -35,9 +45,12 @@ print('=======================DONE=======================\n')
 
 print('=============CONSTRAINED TEST GENERATION=============')
 # Generate constrained testing dataset
-jsonfile = open('lexnorm2015/test_truth.json', 'r')
-rawtweets = json.load(jsonfile)
-jsonfile.close()
+rawtweets = []
+try:
+    jsonfile = open('lexnorm2015/test_truth.json', 'r')
+    rawtweets.append(json.load(jsonfile))
+finally:
+    jsonfile.close()
 
 _, tweets = generatePOSConfidence(rawtweets)
 print('Tagged primary tweets')
