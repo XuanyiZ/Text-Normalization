@@ -15,10 +15,10 @@ def initWithPOS(tweets):
     os.remove(file.name)
     (tmp_fd, tmp_name) = tempfile.mkstemp()
     file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-    file.write(result)
+    file.write(result.replace('"', '"""'))
     file.close()
-    tsv = csv.reader(open(file.name, 'r'), delimiter='\t')
-    os.remove(file.name)
+    file = open(file.name)
+    tsv = csv.reader(file, delimiter='\t')
     idx = 0
     drop = 0
     mappedTweets = []
@@ -43,6 +43,8 @@ def initWithPOS(tweets):
         newtweet = {'mean': np.mean(prob), 'prob': newProb, 'tag': newTag, 'input': tweet}
         mappedTweets.append(newtweet)
         idx += 1
+    file.close()
+    os.remove(file.name)
     return mappedTweets
 
 def generatePOSConfidence(tweets):
@@ -55,10 +57,10 @@ def generatePOSConfidence(tweets):
     os.remove(file.name)
     (tmp_fd, tmp_name) = tempfile.mkstemp()
     file = tempfile.NamedTemporaryFile(mode='w', delete=False)
-    file.write(result)
+    file.write(result.replace('"', '"""'))
     file.close()
-    tsv = csv.reader(open(file.name, 'r'), delimiter='\t')
-    os.remove(file.name)
+    file = open(file.name)
+    tsv = csv.reader(file, delimiter='\t')
     idx = 0
     drop = 0
     originalTweets = []
@@ -87,5 +89,7 @@ def generatePOSConfidence(tweets):
         mappedTweets.append(newtweet)
         originalTweets.append(tweets[idx])
         idx += 1
+    file.close()
+    os.remove(file.name)
     print('Dropped %d' % drop, file=sys.stderr)
     return originalTweets, mappedTweets
