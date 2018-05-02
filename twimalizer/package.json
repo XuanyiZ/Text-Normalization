@@ -1,6 +1,6 @@
 {
-  "name": "Twitter Normalizer",
-  "productName": "Twitter Normalizer",
+  "name": "Tweet Normalizer",
+  "productName": "Tweet Normalizer",
   "version": "1.0.0",
   "description": "CS 410 Final Project - Text Normalizer applied on Twitter",
   "main": "src/index.js",
