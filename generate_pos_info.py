@@ -1,19 +1,24 @@
-import os
+import os, sys, tempfile
 import subprocess
 import csv
 import numpy as np
 
+path = os.path.dirname(os.path.abspath(__file__))
+
 def initWithPOS(tweets):
     serialized = '\n'.join(tweets)
-    file = open('tmp.txt', 'w')
+    (tmp_fd, tmp_name) = tempfile.mkstemp()
+    file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     file.write(serialized)
     file.close()
-    result = subprocess.check_output(('./ark-tweet-nlp-0.3.2/runTagger.sh', './tmp.txt')).decode('utf-8')
-    os.remove('tmp.txt')
-    file = open('tagged.txt', 'w')
+    result = subprocess.check_output((path + '/ark-tweet-nlp-0.3.2/runTagger.sh', file.name)).decode('utf-8')
+    os.remove(file.name)
+    (tmp_fd, tmp_name) = tempfile.mkstemp()
+    file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     file.write(result)
     file.close()
-    tsv = csv.reader(open('tagged.txt', 'r'), delimiter='\t')
+    tsv = csv.reader(open(file.name, 'r'), delimiter='\t')
+    os.remove(file.name)
     idx = 0
     drop = 0
     mappedTweets = []
@@ -38,20 +43,22 @@ def initWithPOS(tweets):
         newtweet = {'mean': np.mean(prob), 'prob': newProb, 'tag': newTag, 'input': tweet}
         mappedTweets.append(newtweet)
         idx += 1
-    os.remove('tagged.txt')
     return mappedTweets
 
 def generatePOSConfidence(tweets):
     serialized = '\n'.join([' '.join(words['input']) for words in tweets])
-    file = open('tmp.txt', 'w')
+    (tmp_fd, tmp_name) = tempfile.mkstemp()
+    file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     file.write(serialized)
     file.close()
-    result = subprocess.check_output(('./ark-tweet-nlp-0.3.2/runTagger.sh', './tmp.txt')).decode('utf-8')
-    os.remove('tmp.txt')
-    file = open('tagged.txt', 'w')
+    result = subprocess.check_output((path + '/ark-tweet-nlp-0.3.2/runTagger.sh', file.name)).decode('utf-8')
+    os.remove(file.name)
+    (tmp_fd, tmp_name) = tempfile.mkstemp()
+    file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     file.write(result)
     file.close()
-    tsv = csv.reader(open('tagged.txt', 'r'), delimiter='\t')
+    tsv = csv.reader(open(file.name, 'r'), delimiter='\t')
+    os.remove(file.name)
     idx = 0
     drop = 0
     originalTweets = []
@@ -80,6 +87,5 @@ def generatePOSConfidence(tweets):
         mappedTweets.append(newtweet)
         originalTweets.append(tweets[idx])
         idx += 1
-    os.remove('tagged.txt')
-    print('Dropped %d' % drop)
+    print('Dropped %d' % drop, file=sys.stderr)
     return originalTweets, mappedTweets

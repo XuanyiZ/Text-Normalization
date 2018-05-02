@@ -11,9 +11,11 @@
   <script src="../node_modules/semantic-ui-vue/dist/umd/semantic-ui-vue.min.js"></script>
   <script>
   import Vue from 'vue';
+  import VueLodash from 'vue-lodash';
   import Test from './test';
 
   Vue.use(SemanticUIVue);
+  Vue.use(VueLodash);
 
   const app = new Vue(Test).$mount('#test');
 

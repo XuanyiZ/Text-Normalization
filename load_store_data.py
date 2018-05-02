@@ -1,6 +1,8 @@
+import os
 import pickle
 import numpy as np
 
+path = os.path.dirname(os.path.abspath(__file__))
 
 def load_dataset_from_file(file_name, cateogries=None):
     """
@@ -36,10 +38,10 @@ def load_dataset(tweet_ix, ix, tokens, features, labels, categories=None):
     return group_ix, tokens, features, labels
 
 
-def save_model(model, file_name='model_trained'):
+def save_model(model, file_name=path + '/model_trained'):
     with open(file_name,'wb') as f:
         pickle.dump(model,f)
 
-def load_model(file_name='model_trained'):
+def load_model(file_name=path + '/model_trained'):
     with open(file_name, 'rb') as f:
         return pickle.load(f)

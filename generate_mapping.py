@@ -1,6 +1,8 @@
 from collections import defaultdict
 from similarity_index import JaccardIndex
-import re
+import re, os
+
+path = os.path.dirname(os.path.abspath(__file__))
 
 def generateMap(tweets):
     static_map = defaultdict(set)
@@ -22,7 +24,7 @@ def generateMap(tweets):
 
 def augmentMapUsingEMNLP(maps):
     static_map, support_map, confidence_map, index_map = maps
-    file = open('emnlp2012-lexnorm/emnlp_dict.txt', 'r')
+    file = open(path + '/emnlp2012-lexnorm/emnlp_dict.txt', 'r')
     pairs = file.read().split()
     file.close()
     for i in range(int(len(pairs) / 2)):
