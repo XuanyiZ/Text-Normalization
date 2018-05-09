@@ -17,7 +17,6 @@ The Tweet Normalizer is the implementation of the unconstrained mode of [this pa
             - [Constrained mode](#constrained-mode)
             - [Unconstrained mode](#unconstrained-mode)
         - [Candidate Evaluation](#candidate-evaluation)
-- [~~TODO CLASSIFIER DETAIL, WHAT TYPE, TWO MODES~~](#todo-classifier-detail--what-type--two-modes)
     - [Implementation](#implementation)
         - [Normalizer Implementation](#normalizer-implementation)
             - [Dataset generation:](#dataset-generation)
@@ -73,12 +72,23 @@ The paper propose to use Jaccard index as the similarity measure, which is the c
 The following are considered possible candidates:
 - The token itself
 - Words in the mapping
-    - A different word: transformed word, such as `ur -> your`
+    - Canonical form: transformed word, such as `ur -> your`
     - Split words: a token is split into multiple words, such as `lol -> laugh out loud`
+
+*During testing, token itself is not included.
 
 #### Constrained mode
 
+The following candidates are generated for each token:
+- Token itslef
+- Top scoring canonical form (for repetitive token only, which means the same letter appears three times consecutively)
+- Split words (if exists)
+
 #### Unconstrained mode
+
+The following candidates are generated for each token:
+- Token itslef
+- Top 3 scoring words in mapping (no differentiation between canonical form and splitting)
 
 ### Candidate Evaluation
 
@@ -97,7 +107,7 @@ For a token t<sub>i</sub> in the tweet T composed of "t<sub>1</sub> t<sub>2</sub
 | POS of t<sub>i-1</sub>   | Candidate   | The part-of-speech tagging of the previous token                                         | Empty for the first token                                                                             |
 | POS of t<sub>i</sub>     | Candidate   | The part-of-speech tagging of the previous candidate                                     | If the candidate is of multiple words, the POS tagging for the first word is used                     |
 
-# ~~TODO CLASSIFIER DETAIL, WHAT TYPE, TWO MODES~~
+~~TODO CLASSIFIER DETAIL, WHAT TYPE, TWO MODES~~
 
 
 ## Implementation
