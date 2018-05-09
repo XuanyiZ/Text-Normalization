@@ -11,12 +11,12 @@ print('=============TRAINING SET GENERATION=============')
 rawtweets = []
 try:
     jsonfile = open('lexnorm2015/train_data.json', 'r')
-    rawtweets.append(json.load(jsonfile))
+    rawtweets.extend(json.load(jsonfile))
 finally:
     jsonfile.close()
 try:
     jsonfile = open('twimalizer/augmentData.json', 'r')
-    rawtweets.append(json.load(jsonfile))
+    rawtweets.extend(json.load(jsonfile))
 except:
     pass
 finally:
@@ -48,7 +48,7 @@ print('=============CONSTRAINED TEST GENERATION=============')
 rawtweets = []
 try:
     jsonfile = open('lexnorm2015/test_truth.json', 'r')
-    rawtweets.append(json.load(jsonfile))
+    rawtweets.extend(json.load(jsonfile))
 finally:
     jsonfile.close()
 
