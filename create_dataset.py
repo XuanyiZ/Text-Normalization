@@ -6,6 +6,10 @@ from generate_pos_info import *
 from generate_candidate import *
 from generate_feature import *
 
+"""
+The script that generate the training and testing dataset with all the mappings saved for future use.
+"""
+
 print('=============TRAINING SET GENERATION=============')
 # Generate Training dataset
 rawtweets = []

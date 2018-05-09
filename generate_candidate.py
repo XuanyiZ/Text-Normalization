@@ -1,5 +1,17 @@
 import numpy as np
 
+"""
+Return a list of mapped candidates, which contain fields 
+ - input: original input
+ - label: whether this is correct form
+ - feature: feature vector
+ - token: normalizing token
+ - category: type of candidate (either self, canonical, or split)
+ - tweet_idx: tweet index
+ - idx: word index
+
+Generate all possible normalizing token.
+"""
 def generateTrainingCandidates(mappedTweets, maps, includeSelf=False):
     # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
     static_map, support_map, confidence_map, index_map = maps
@@ -66,12 +78,28 @@ def generateTrainingCandidates(mappedTweets, maps, includeSelf=False):
         tweet_idx += 1
     return candidates
 
+"""
+Check whether three same letters appear consecutively.
+"""
 def isRepetitive(token):
     for i in range(len(token) - 2):
         if token[i] == token[i + 1] and token[i + 1] == token[i + 2]:
             return True
     return False
 
+"""
+Return a list of mapped candidates, which contain fields 
+ - input: original input
+ - label: whether this is correct form
+ - feature: feature vector
+ - token: normalizing token
+ - category: type of candidate (either self, canonical, or split)
+ - tweet_idx: tweet index
+ - idx: word index
+
+If constrained is set True, then similarity measure is used only when the 
+word is repetitive, otherwise, top 3 tokens are used.
+"""
 def generateCandidates(mappedTweets, maps, includeSelf=True, constrained=True):
     # (before_mean, before_conf, support, confidence, sim_index, len_ti, len_c, diff_len)
     static_map, support_map, confidence_map, index_map = maps

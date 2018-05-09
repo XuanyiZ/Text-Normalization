@@ -5,6 +5,12 @@ import numpy as np
 
 path = os.path.dirname(os.path.abspath(__file__))
 
+"""
+Invoke ark-tweet POS tagger and extend each Tweet object with field 
+ - mean (Mean POS tagging confidence)
+ - prob (Array of POS tagging confidence for each token)
+ - tag (Array of POS tags)
+"""
 def initWithPOS(tweets):
     serialized = '\n'.join(tweets)
     (tmp_fd, tmp_name) = tempfile.mkstemp()
@@ -47,6 +53,16 @@ def initWithPOS(tweets):
     os.remove(file.name)
     return mappedTweets
 
+"""
+Invoke ark-tweet POS tagger and extend each Tweet object with field 
+ - mean (Mean POS tagging confidence)
+ - prob (Array of POS tagging confidence for each token)
+ - tag (Array of POS tags)
+
+Work only for tweets that normalize to equal or longer in length. 
+If normalized tweet is shorter in token count, it is dropped. 
+originalTweet contains all legal tweets and mappedTweets is its mapped version.
+"""
 def generatePOSConfidence(tweets):
     serialized = '\n'.join([' '.join(words['input']) for words in tweets])
     (tmp_fd, tmp_name) = tempfile.mkstemp()

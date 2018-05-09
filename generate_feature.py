@@ -1,3 +1,7 @@
+"""
+Generate feature vectors, and the corresponding properties and labels. 
+See generateCandidates for explaination about properties.
+"""
 def generateFeatureVectors(candidateTweets, TaggedTweets):
     assert len(candidateTweets) == len(TaggedTweets), 'Not matching in length, cannot compose'
     tweet_id = []

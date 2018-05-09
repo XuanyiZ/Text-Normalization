@@ -1,5 +1,8 @@
 import itertools
 
+"""
+Generate n-gram set. With $ appended (prepended) at the end (beginning).
+"""
 def ngram(word, n):
     wordlist = list(word)
     k0gram = [''.join(gram) for gram in \
@@ -12,6 +15,9 @@ def ngram(word, n):
         k0gram[-1] = k0gram[-1] + '$'
     return set(k0gram)
 
+"""
+Generate k-skip-n gram set. With | to separate characters.
+"""
 def skipgram(word, n, k):
     wordlist = list(word)
     kngram = [list(set(['|'.join(gram) for gram in \
@@ -19,9 +25,15 @@ def skipgram(word, n, k):
                 for skip in range(1, k + 1)]
     return set(itertools.chain.from_iterable(kngram))
 
+"""
+Generate proposed feature set which combines n-gram and k-skip-n gram.
+"""
 def sim_feature(word, n=2, k=1):
     return set(itertools.chain.from_iterable([list(ngram(word, n))] + [list(skipgram(word, n, k))]))
 
+"""
+Calculate the Jaccard index between two words.
+"""
 def JaccardIndex(s1, s2, n=2, k=1, tailWeight=3):
     feature1 = sim_feature(s1, n, k)
     feature2 = sim_feature(s2, n, k)
