@@ -140,12 +140,12 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 |generatePOSConfidence|tweets:List|(originalTweets, mappedTweets):(List, List)|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags). Work only for tweets that normalize to equal or longer in length. If normalized tweet is shorter in token count, it is dropped. `originalTweet` contains all legal tweets and `mappedTweets` is its mapped version.|
 - `similarity_index.py`
 
-|Function   |Parameters    |Return |Description |
-|--------   |---------- |------ |-----------    |
-|ngram  |word:string<br>ninteger  |k0gram:set |Generate n-gram set. With `$` appended (prepended) at the end (beginning). |
-|skipgram   |word:string<br>n:integer<br>k:integer  |kngram:set |Generate k-skip-n gram set. With `|` to separate characters. |
-|sim_feature    |word:string<br>n:integer<br>k:integer(default=1)   |features:set   |Generate proposed feature set which combines n-gram and k-skip-n gram. |
-|JaccardIndex   |s1:string<br>s2:string<br>n:integer(default=2)<br>k:integer(default=1)<br>tailWeight:integer(default=3)    |score:float    |Calculate the Jaccard index between two words. |
+|Function|Parameters|Return|Description|
+|--------|----------|------|-----------|
+|ngram|word:string<br>ninteger|k0gram:set|Generate n-gram set. With `$` appended (prepended) at the end (beginning).|
+|skipgram|word:string<br>n:integer<br>k:integer|kngram:set|Generate k-skip-n gram set. With `|` to separate characters. |
+|sim_feature|word:string<br>n:integer<br>k:integer(default=1)|features:set|Generate proposed feature set which combines n-gram and k-skip-n gram.|
+|JaccardIndex|s1:string<br>s2:string<br>n:integer(default=2)<br>k:integer(default=1)<br>tailWeight:integer(default=3)|score:float|Calculate the Jaccard index between two words.|
 - `generate_candidate.py`
 
 |Function|Parameters|Return|Description|
