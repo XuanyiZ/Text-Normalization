@@ -139,7 +139,7 @@ export default {
     startRevise (tweet) {
       this.currentTweet = tweet
       this.reviseModal = true
-      this.revisedArray = tweet.output.slice()
+      this.revisedArray = tweet.output.slice(0, tweet.output.length - 1)
     },
     reviseTheTweet () {
       let tmpIdx = this._.findIndex(this.tweets, { id: this.currentTweet.id })
