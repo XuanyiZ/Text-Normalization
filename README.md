@@ -86,34 +86,36 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|generateMap|tweets:List|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)||
-|augmentMapUsingEMNLP|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)||
-|augmentMapUsingFeiLiu|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)||
-|consolidateMap|(static_map(defaultdict),<br> support_map(defaultdict),<br> confidence_map(defaultdict),<br> index_map(defaultdict))|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(dict, dict, dict, dict)||
+|generateMap|tweets:List|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Create mapping from training data. Static map is all the mappings from token to its normalized form. Support map counts the times a token appears. Confidence map is the frequency counting for each normalized form when a token appears. Index map is the Jaccard index between token and the normalized form.|
+|augmentMapUsingEMNLP|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Augment the mappings with EMNLP dataset.|
+|augmentMapUsingFeiLiu|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Augment the mappings with Fei Liu's dataset.|
+|consolidateMap|(static_map(defaultdict),<br> support_map(defaultdict),<br> confidence_map(defaultdict),<br> index_map(defaultdict))|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(dict, dict, dict, dict)|Convert to normal dictionary in Python for saving later.|
 - `generate_pos_info.py`
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|initWithPOS|tweets:List|mappedTweets:List||
-|generatePOSConfidence|tweets:List|(originalTweets, mappedTweets):(List, List)||
+|initWithPOS|tweets:List|mappedTweets:List|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags).|
+|generatePOSConfidence|tweets:List|(originalTweets, mappedTweets):(List, List)|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags). Work only for tweets that normalize to equal or longer in length. If normalized tweet is shorter in token count, it is dropped. `originalTweet` contains all legal tweets and `mappedTweets` is its mapped version.|
 - `similarity_index.py`
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|ngram|word:string<br>ninteger|k0gram:set||
-|skipgram|word:string<br>n:integer<br>k:integer|kngram:set||
-|sim_feature|word:string<br>n:integer<br>k:integer(default=1)|features:set||
-|JaccardIndex|s1:string<br>s2:string<br>n:integer(default=2)<br>k:integer(default=1)<br>tailWeight:integer(default=3)|score:float||
+|ngram|word:string<br>ninteger|k0gram:set|Generate n-gram set. With `$` appended (prepended) at the end (beginning).|
+|skipgram|word:string<br>n:integer<br>k:integer|kngram:set|Generate k-skip-n gram set. With `|` to separate characters.|
+|sim_feature|word:string<br>n:integer<br>k:integer(default=1)|features:set|Generate proposed feature set which combines n-gram and k-skip-n gram.|
+|JaccardIndex|s1:string<br>s2:string<br>n:integer(default=2)<br>k:integer(default=1)<br>tailWeight:integer(default=3)|score:float|Calculate the Jaccard index between two words.|
 - `generate_candidate.py`
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|||||
+|generateCandidates|mappedTweets:List<br>maps:(4 dictionaries)<br>includeSelf:bool(default=True)<br>constrained:bool(default=True)|candidates:List|Return a list of mapped candidates, which contain fields original input `input`, whether this is correct form `label`, feature vector `feature`, normalizing token `token`, type of candidate `category` (either `self`, `canonical`, or `split`), tweet index `tweet_idx`, and word index `idx`. If `constrained` is set True, then similarity measure is used only when the word is repetitive, otherwise, top 3 tokens are used.|
+|generateTrainingCandidates|mappedTweets:List<br>maps:(4 dictionaries)<br>includeSelf:bool(default=False)|candidates:List|Same as `generateCandidates` except for all possible normalizing tokens are used.|
+|isRepetitive|token:string|repetitive:bool|Check whether three same letters appear consecutively.|
 - `generate_feature.py`
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|||||
+|generateFeatureVectors|(candidateTweets, TaggedTweets):(List, List)|(tweet_id, indices, category, token, training, label):(List, List, List ,List, List, List)|Generate feature vectors, and the corresponding properties and labels. See `generateCandidates` for explaination about properties.|
 - `create_dataset.py`
 
 The script that generate the training and testing dataset with all the mappings saved for future use.
