@@ -4,6 +4,28 @@
 
 The Tweet Normalizer is the implementation of the unconstrained mode of [this paper](http://www.aclweb.org/anthology/W15-4313): NCSU-SAS-Ning: Candidate Generation and Feature Engineering for Supervised Lexical Normalization. Tweets are retrieved by the Twitter API /statuses/filter on the account @TestNormalizer specifically registered for this application. With the training on dataset provided by [this competition](https://noisy-text.github.io/2015/norm-shared-task.html), and static mapping expanded by Lexical normalisation dictionary (found in Resource section in the competition). The application supplies the revision feature, which expand the dataset to enable better normalization.
 
+- [CS410 Final Project - Tweet Normalizer](#cs410-final-project---tweet-normalizer)
+    - [Introduction](#introduction)
+    - [Setup](#setup)
+        - [Set up Python 3 environment](#set-up-python-3-environment)
+        - [Set up Electron](#set-up-electron)
+        - [Start the application](#start-the-application)
+    - [Architecture](#architecture)
+        - [Feature Set](#feature-set)
+        - [Similarity Index](#similarity-index)
+        - [Candidate Generation](#candidate-generation)
+            - [Constrained mode](#constrained-mode)
+            - [Unconstrained mode](#unconstrained-mode)
+        - [Candidate Evaluation](#candidate-evaluation)
+- [~~TODO CLASSIFIER DETAIL, WHAT TYPE, TWO MODES~~](#todo-classifier-detail--what-type--two-modes)
+    - [Implementation](#implementation)
+        - [Normalizer Implementation](#normalizer-implementation)
+            - [Dataset generation:](#dataset-generation)
+            - [Training & testing:](#training-testing)
+            - [Frontend:](#frontend)
+        - [GUI Implementation](#gui-implementation)
+    - [Training & Testing](#training-testing)
+
 ## Setup
 
 *The application only runs on MacOS or Linux.
@@ -47,6 +69,16 @@ love -> { $lo, ov, ve$, l|v, o|e }
 The paper propose to use Jaccard index as the similarity measure, which is the cardinality ratio of the intersection of two feature sets and their union.
 
 ### Candidate Generation
+
+The following are considered possible candidates:
+- The token itself
+- Words in the mapping
+    - A different word: transformed word, such as `ur -> your`
+    - Split words: a token is split into multiple words, such as `lol -> laugh out loud`
+
+#### Constrained mode
+
+#### Unconstrained mode
 
 ### Candidate Evaluation
 
@@ -139,6 +171,7 @@ A class that ...
 - `normalize_tweets.py`
 
 The script that spawn the unconstrained mode normalizer and read from `stdin` to get a tweet to normalize. The result is written to `stdout`.
+
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
 |mapATweet|tweet:string|(inputTokens, normalizedTokens):(List, List)|Normalize a single tweet and tokenize them.|
@@ -154,6 +187,7 @@ Normalizing process is achieved through using [Subprocess](https://www.npmjs.com
 To train a new model, or, if new data are added and you would like to rebuild the dataset. Run
 ```
 python3 create_dataset.py
+python3 training.py
 ```
 
-~~TODO CONTINUE~~
+Now you have the model saved to a file, you can start the application in unconstrained mode following the instrutions above.
