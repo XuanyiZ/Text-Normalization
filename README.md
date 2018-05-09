@@ -81,7 +81,7 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 
 ### Normalizer Implementation
 
-Dataset generation:
+#### Dataset generation:
 - `generate_mapping.py`
 
 |Function|Parameters|Return|Description|
@@ -116,16 +116,12 @@ Dataset generation:
 |||||
 - `create_dataset.py`
 
-|Function|Parameters|Return|Description|
-|--------|----------|------|-----------|
-|||||
+The script that generate the training and testing dataset with all the mappings saved for future use.
 
-Training & testing:
+#### Training & testing:
 - `predictor.py`
 
-|Function|Parameters|Return|Description|
-|--------|----------|------|-----------|
-|||||
+A class that ...
 - `training.py`
 
 |Function|Parameters|Return|Description|
@@ -137,12 +133,13 @@ Training & testing:
 |--------|----------|------|-----------|
 |||||
 
-Frontend:
+#### Frontend:
 - `normalize_tweets.py`
 
+The script that spawn the unconstrained mode normalizer and read from `stdin` to get a tweet to normalize. The result is written to `stdout`.
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|||||
+|mapATweet|tweet:string|(inputTokens, normalizedTokens):(List, List)|Normalize a single tweet and tokenize them.|
 
 ### GUI Implementation
 
