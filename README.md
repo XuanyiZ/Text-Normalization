@@ -143,7 +143,7 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
 |ngram|word:string<br>ninteger|k0gram:set|Generate n-gram set. With `$` appended (prepended) at the end (beginning).|
-|skipgram|word:string<br>n:integer<br>k:integer|kngram:set|Generate k-skip-n gram set. With `|` to separate characters. |
+|skipgram|word:string<br>n:integer<br>k:integer|kngram:set|Generate k-skip-n gram set. With &#124; to separate characters. |
 |sim_feature|word:string<br>n:integer<br>k:integer(default=1)|features:set|Generate proposed feature set which combines n-gram and k-skip-n gram.|
 |JaccardIndex|s1:string<br>s2:string<br>n:integer(default=2)<br>k:integer(default=1)<br>tailWeight:integer(default=3)|score:float|Calculate the Jaccard index between two words.|
 - `generate_candidate.py`
@@ -211,3 +211,10 @@ python3 training.py
 ```
 
 Now you have the model saved to a file, you can start the application in unconstrained mode following the instrutions above.
+
+For model evaluation, we obtained the following result (see training.py for more details):
+
+|dataset|precision|recall|f1-score|
+|--------|----------|------|-----------|
+|Constrained|0.9258239891267415|0.9989734188817598|0.9610087293889428||
+|Unconstrained|0.972782874617737|0.9924084858569051|0.9824976835169361||
