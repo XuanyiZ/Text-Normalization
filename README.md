@@ -229,3 +229,14 @@ For model evaluation, we obtained the following result (see training.py for more
 | ------------- | ------------------ | ------------------ | ------------------ |
 | Constrained   | 0.9258239891267415 | 0.9989734188817598 | 0.9610087293889428 |
 | Unconstrained | 0.972782874617737  | 0.9924084858569051 | 0.9824976835169361 |
+
+
+## Brief contribution description
+
+Dachun Sun:
+
+TianCheng Wu:
+
+Xuanyi Zhu:
+
+
