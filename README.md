@@ -57,7 +57,7 @@ Two-step procedure including candidate generation and candidate evaluation is pr
 
 ### Feature Set
 
-Feature set are generated for a token by calculating its n-gram and k-skip-n gram (In this application the configuration is 2-gram and 1-skip-2 gram). '$' is prepended and appended before and after the first and last n-gram, and '|' is added between skips. For example:
+The feature set is generated for a token by calculating its n-gram and k-skip-n-gram (In this application the configuration is 2-gram and 1-skip-2 gram). '$' is prepended and appended before and after the first and last n-gram, and '|' is added between skips. For example:
 
 ```
 love -> { $lo, ov, ve$, l|v, o|e }
@@ -65,7 +65,7 @@ love -> { $lo, ov, ve$, l|v, o|e }
 
 ### Similarity Index
 
-The paper propose to use Jaccard index as the similarity measure, which is the cardinality ratio of the intersection of two feature sets and their union.
+The paper proposed to use Jaccard index as the similarity measure, which is the cardinality ratio of the intersection of two feature sets and their union.
 
 ### Candidate Generation
 
@@ -80,14 +80,14 @@ The following are considered possible candidates:
 #### Constrained mode
 
 The following candidates are generated for each token:
-- Token itslef
+- Token itself
 - Top scoring canonical form (for repetitive token only, which means the same letter appears three times consecutively)
 - Split words (if exists)
 
 #### Unconstrained mode
 
 The following candidates are generated for each token:
-- Token itslef
+- Token itself
 - Top 3 scoring words in mapping (no differentiation between canonical form and splitting)
 
 ### Candidate Evaluation
@@ -103,16 +103,16 @@ For a token t<sub>i</sub> in the tweet T composed of "t<sub>1</sub> t<sub>2</sub
 | Candidate Length         | Candidate   | The length of the candidate string                                                       |                                                                                                       |
 | Length Difference        | Candidate   | Difference of length between the token and the candidate                                 |                                                                                                       |
 | Mean POS Confidence Diff | Candidate   | The change in the mean POS confidence for the whole tweet before and after normalization |                                                                                                       |
-| POS Confidence Diff      | Candidate   | The change in POS confidence for the current token before and after normalization        | If the candidate is of multiple words, average POS confidence is used to calculate against the change |
+| POS Confidence Diff      | Candidate   | The change in POS confidence for the current token before and after normalization        | If the candidate is of multiple words, average POS confidence is used to calculate the change         |
 | POS of t<sub>i-1</sub>   | Candidate   | The part-of-speech tagging of the previous token                                         | Empty for the first token                                                                             |
 | POS of t<sub>i</sub>     | Candidate   | The part-of-speech tagging of the previous candidate                                     | If the candidate is of multiple words, the POS tagging for the first word is used                     |
 
-Random forest classifier is used for training. For fitting, simply pass the features and labels to the random forest classifier. For prediction, first obtain a list of predictions using classifier. Then for each token, among candidates predicted to be correct canonical form, select the one with highest confidence.
+Random forest classifier is used for training. For fitting, simply pass the features and labels to the random forest classifier. For prediction, first, obtain a list of predictions using classifier. Then for each token, among candidates predicted to be correct canonical form, select the one with the highest confidence.
 
 
 ## Implementation
 
-Training data is provided in JSON file, and the basic for of a tweet is the following:
+Training data is provided in JSON file, and the basic format for a tweet is the following:
 ```
 {
     'input':  ['token1', 'token2', ...],
@@ -128,7 +128,7 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|generateMap|tweets:List|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Create mapping from training data. Static map is all the mappings from token to its normalized form. Support map counts the times a token appears. Confidence map is the frequency counting for each normalized form when a token appears. Index map is the Jaccard index between token and the normalized form.|
+|generateMap|tweets:List|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Create the mapping from training data. Static map is all the mappings from token to its normalized form. Support map counts the times a token appears. Confidence map is the frequency count for each normalized form when a token appears. Index map is the Jaccard index between the token and the normalized form.|
 |augmentMapUsingEMNLP|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Augment the mappings with EMNLP dataset.|
 |augmentMapUsingFeiLiu|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(defaultdict, defaultdict, defaultdict, defaultdict)|Augment the mappings with Fei Liu's dataset.|
 |consolidateMap|(static_map(defaultdict),<br> support_map(defaultdict),<br> confidence_map(defaultdict),<br> index_map(defaultdict))|(static_map,<br> support_map,<br> confidence_map,<br> index_map):(dict, dict, dict, dict)|Convert to normal dictionary in Python for saving later.|
@@ -137,7 +137,7 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
 |initWithPOS|tweets:List|mappedTweets:List|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags).|
-|generatePOSConfidence|tweets:List|(originalTweets, mappedTweets):(List, List)|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags). Work only for tweets that normalize to equal or longer in length. If normalized tweet is shorter in token count, it is dropped. `originalTweet` contains all legal tweets and `mappedTweets` is its mapped version.|
+|generatePOSConfidence|tweets:List|(originalTweets, mappedTweets):(List, List)|Invoke ark-tweet POS tagger and extend each Tweet object with field `mean` (Mean POS tagging confidence), `prob` (Array of POS tagging confidence for each token), `tag` (Array of POS tags). Work only for tweets that normalize to equal or longer in length. If the normalized tweet is shorter in the number of tokens, it is dropped. `originalTweet` contains all legal tweets and `mappedTweets` is its mapped version.|
 - `similarity_index.py`
 
 |Function|Parameters|Return|Description|
@@ -160,7 +160,7 @@ Training data is provided in JSON file, and the basic for of a tweet is the foll
 |generateFeatureVectors|(candidateTweets, TaggedTweets):(List, List)|(tweet_id, indices, category, token, training, label):(List, List, List ,List, List, List)|Generate feature vectors, and the corresponding properties and labels. See `generateCandidates` for explaination about properties.|
 - `create_dataset.py`
 
-The script that generate the training and testing dataset with all the mappings saved for future use.
+The script that generates the training and testing dataset with all the mappings saved for future use.
 
 #### Training & testing
 - `predictor.py`
@@ -168,13 +168,13 @@ The script that generate the training and testing dataset with all the mappings 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
 |Predictor|(classifier):<br>(sklearn.ensemble.RandomForestClassifier)|Predictor|__init__ the class||
-|Predictor.fit|(features,<br> labels):<br>(numpy.ndarray,<br> numpy.ndarray)|Predictor|Fit the features and labels to predictor||
-|Predictor.predict|(group_ix,<br> features):<br>(list,<br> numpy.ndarray)|(result):<br>(numpy.ndarray)|predict the resultsby select just one canonical form for each group_ix. When labels are identical, default use the first column of training data to break tie||
+|Predictor.fit|(features,<br> labels):<br>(numpy.ndarray,<br> numpy.ndarray)|Predictor|Fit the features and labels to the predictor||
+|Predictor.predict|(group_ix,<br> features):<br>(list,<br> numpy.ndarray)|(result):<br>(numpy.ndarray)|predict the results by select just one canonical form for each group_ix. When labels are identical, default use the first column of training data to break the tie||
 |Predictor.score|(group_ix,<br> features,<br> labels):<br>(list,<br> numpy.ndarray,<br> numpy.ndarray)|(precision,<br> recall,<br> f1_score):<br>(float,<br> float,<br> float)|return precision recall and f1_score for testing_data||
 
 - `training.py`
 
-training.py passed random forest classifier to the predictor class we create, fit the training data to it, and then save the model. It then evaluate the precision recall f1-score on the constrained and unconstrained datasets and print out predictions to make sure result looks correct.
+training.py passed random forest classifier to the predictor class we create, fit the training data to it, and then save the model. It then evaluates the precision, recall, and f1-score on both the constrained and unconstrained datasets and prints out predictions to make sure result looks correct.
 
 
 - `load_store_data.py`
@@ -190,7 +190,7 @@ training.py passed random forest classifier to the predictor class we create, fi
 #### Frontend
 - `normalize_tweets.py`
 
-The script that spawn the unconstrained mode normalizer and read from `stdin` to get a tweet to normalize. The result is written to `stdout`.
+The script that spawns the unconstrained mode normalizer and read from `stdin` to get a tweet to normalize. The result is written to `stdout`.
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
@@ -198,9 +198,9 @@ The script that spawn the unconstrained mode normalizer and read from `stdin` to
 
 ### GUI Implementation
 
-The GUI is implemented using modern techniques with web development. The wrapper is Electron and the framework is Vue.js. Electron configuration is in `src/index.html` and `src/index.js`. Vue component `src/normalizer.vue` is using Semantic UI to create the feed list. A Twitter client is connected at the creation of the component, stream API is hooked to a function that continuously push new tweets to the array.
+The GUI is implemented using modern techniques with web development. The wrapper is Electron and the framework is Vue.js. Electron configuration is in `src/index.html` and `src/index.js`. Vue component `src/normalizer.vue` is using Semantic UI to create the feed list. A Twitter client is connected at the creation of the component, stream API is hooked to a function that continuously pushes new tweets to the array.
 
-Normalizing process is achieved through using [Subprocess](https://www.npmjs.com/package/subprocess) to spawn a python instance to execute `normalize_tweets.py` with the input being the tweet and its output parsed to substitute the chosen tweet.
+Normalizing process is achieved by using [Subprocess](https://www.npmjs.com/package/subprocess) to spawn a python instance to execute `normalize_tweets.py` with the input being the tweet and its output parsed to substitute the chosen tweet.
 
 ## Training & Testing
 
@@ -210,7 +210,7 @@ python3 create_dataset.py
 python3 training.py
 ```
 
-Now you have the model saved to a file, you can start the application in unconstrained mode following the instrutions above.
+Now you have the model saved to a file, you can start the application in unconstrained mode following the instructions above.
 
 For model evaluation, we obtained the following result (see training.py for more details):
 
