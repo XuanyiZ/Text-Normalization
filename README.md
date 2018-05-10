@@ -234,7 +234,7 @@ For model evaluation, we obtained the following result (see training.py for more
 ## Brief contribution description
 
 Dachun Sun:
-online text normalization dataset collection
+online text normalization dataset collection.
 training logic flow manipulation
 implement and optimize word splitting process
 implement enhanced frontend using electron
@@ -258,5 +258,6 @@ user-friendly GUI optimization with the empirical user study
 group progress coordination
 research paper analyzation
 wrote the software documentation
+
 project presentation video
 
