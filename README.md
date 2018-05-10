@@ -165,7 +165,6 @@ The script that generate the training and testing dataset with all the mappings 
 #### Training & testing
 - `predictor.py`
 
-Predictor is the class for candidate evaluation
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
 |Predictor|(classifier):<br>(sklearn.ensemble.RandomForestClassifier)|Predictor|__init__ the class||
