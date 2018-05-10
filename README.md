@@ -17,6 +17,8 @@ The Tweet Normalizer is the implementation of the unconstrained mode of [this pa
             - [Constrained mode](#constrained-mode)
             - [Unconstrained mode](#unconstrained-mode)
         - [Candidate Evaluation](#candidate-evaluation)
+            - [Feature](#feature)
+            - [Classifier](#classifier)
     - [Implementation](#implementation)
         - [Normalizer Implementation](#normalizer-implementation)
             - [Dataset generation](#dataset-generation)
@@ -24,6 +26,7 @@ The Tweet Normalizer is the implementation of the unconstrained mode of [this pa
             - [Frontend](#frontend)
         - [GUI Implementation](#gui-implementation)
     - [Training & Testing](#training-testing)
+    - [Brief contribution description](#brief-contribution-description)
 
 ## Setup
 
@@ -233,51 +236,23 @@ For model evaluation, we obtained the following result (see training.py for more
 
 ## Brief contribution description
 
-Dachun Sun:
-
-online text normalization dataset collection
-
-training logic flow manipulation
-
-implement and optimize word splitting process
-
-implement enhanced frontend using electron
-
-debugging and performance optimization
-
-research paper analyzation
-
-wrote the software documentation
-
-
-TianCheng Wu:
-
-backend machine learning data generation and preparation
-
-learning feature extraction and selection
-
-learning model selection and optimization
-
-build training skeleton
-
-research paper analyzation
-
-wrote the software documentation
-
-
-Xuanyi Zhu:
-
-frontend implementation using the PyQt5 framework
-
-frontend debugging and optimization
-
-user-friendly GUI optimization with the empirical user study
-
-group progress coordination
-
-research paper analyzation
-
-wrote the software documentation
-
-project presentation video
-
+- Dachun Sun:
+    - Online text normalization dataset collection
+    - Application structure design
+    - Implement and optimize word splitting process
+    - Implement enhanced frontend using electron
+    - Debugging and performance optimization
+    - Software documentation
+- Tiancheng Wu:
+    - Backend machine learning data preparation
+    - Learning feature extraction and selection
+    - Learning model selection and optimization
+    - Training the model
+    - Software documentation
+- Xuanyi Zhu:
+    - Frontend implementation using the PyQt5 framework
+    - Frontend debugging and optimization
+    - User-friendly GUI optimization with the empirical user study
+    - Group progress coordination
+    - Software documentation
+    - Project presentation video
