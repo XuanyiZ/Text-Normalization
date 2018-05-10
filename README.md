@@ -169,7 +169,7 @@ The script that generate the training and testing dataset with all the mappings 
 |--------|----------|------|-----------|
 |Predictor|(classifier):<br>(sklearn.ensemble.RandomForestClassifier)|Predictor|__init__ the class||
 |Predictor.fit|(features,<br> labels):<br>(numpy.ndarray,<br> numpy.ndarray)|Predictor|Fit the features and labels to predictor||
-|Predictor.predict|(group_ix,<br> features):<br>(list,<br> numpy.ndarray)|(result):<br>(np.ndarray)|predict the resultsby select just one canonical form for each group_ix. When labels are identical, default use the first column of training data to break tie||
+|Predictor.predict|(group_ix,<br> features):<br>(list,<br> numpy.ndarray)|(result):<br>(numpy.ndarray)|predict the resultsby select just one canonical form for each group_ix. When labels are identical, default use the first column of training data to break tie||
 |Predictor.score|(group_ix,<br> features,<br> labels):<br>(list,<br> numpy.ndarray,<br> numpy.ndarray)|(precision,<br> recall,<br> f1_score):<br>(float,<br> float,<br> float)|return precision recall and f1_score for testing_data||
 
 - `training.py`
