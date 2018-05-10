@@ -10,6 +10,9 @@ class Predictor():
         self.classifier = classifier
 
     def fit(self, features, labels):
+        """
+        Fit the features and labels to predictor
+        """
         self.classifier.fit(features, labels)
         return self
 

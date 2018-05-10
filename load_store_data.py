@@ -6,7 +6,8 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 def load_dataset_from_file(file_name, cateogries=None):
     """
-        :return: group_ix, tokens, features and labels from data set
+    load dataset from file to arrays needed for prediction
+    :return: group_ix, tokens, features and labels from data set
     """
     with open(file_name,'rb') as f:
         tweet_ix, ix, _, tokens,  features, labels = map(np.array, pickle.load(f))
@@ -14,7 +15,10 @@ def load_dataset_from_file(file_name, cateogries=None):
 
 
 def load_dataset(tweet_ix, ix, tokens, features, labels, categories=None):
-
+    """
+    load dataset from various part to arrays needed for prediction
+    :return: group_ix, tokens, features and labels from data set
+    """
     def one_hot_encode(data, ixs):
         assert(all(np.array(ixs)>=0))
         for i in ixs:
@@ -39,9 +43,20 @@ def load_dataset(tweet_ix, ix, tokens, features, labels, categories=None):
 
 
 def save_model(model, file_name=path + '/model_trained'):
+    """
+    save model to file specified
+    :param model: any model to be saved
+    :param file_name: file to dump the model
+    :return: None
+    """
     with open(file_name,'wb') as f:
         pickle.dump(model,f)
 
 def load_model(file_name=path + '/model_trained'):
+    """
+    load model from file specified
+    :param file_name: file to load the model
+    :return: model
+    """
     with open(file_name, 'rb') as f:
         return pickle.load(f)

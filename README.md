@@ -107,7 +107,7 @@ For a token t<sub>i</sub> in the tweet T composed of "t<sub>1</sub> t<sub>2</sub
 | POS of t<sub>i-1</sub>   | Candidate   | The part-of-speech tagging of the previous token                                         | Empty for the first token                                                                             |
 | POS of t<sub>i</sub>     | Candidate   | The part-of-speech tagging of the previous candidate                                     | If the candidate is of multiple words, the POS tagging for the first word is used                     |
 
-~~TODO CLASSIFIER DETAIL, WHAT TYPE, TWO MODES~~
+Random forest classifier is used for training. For fitting, simply pass the features and labels to the random forest classifier. For prediction, first obtain a list of predictions using classifier. Then for each token, among candidates predicted to be correct canonical form, select the one with highest confidence.
 
 
 ## Implementation
@@ -165,17 +165,28 @@ The script that generate the training and testing dataset with all the mappings 
 #### Training & testing
 - `predictor.py`
 
-A class that ...
-- `training.py`
-
+Predictor is the class for candidate evaluation
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|||||
+|Predictor|(classifier):<br>(sklearn.ensemble.RandomForestClassifier)|Predictor|__init__ the class||
+|Predictor.fit|(features,<br> labels):<br>(numpy.ndarray,<br> numpy.ndarray)|Predictor|Fit the features and labels to predictor||
+|Predictor.predict|(group_ix,<br> features):<br>(list,<br> numpy.ndarray)|(result):<br>(np.ndarray)|predict the resultsby select just one canonical form for each group_ix. When labels are identical, default use the first column of training data to break tie||
+|Predictor.score|(group_ix,<br> features,<br> labels):<br>(list,<br> numpy.ndarray,<br> numpy.ndarray)|(precision,<br> recall,<br> f1_score):<br>(float,<br> float,<br> float)|return precision recall and f1_score for testing_data||
+
+- `training.py`
+
+training.py passed random forest classifier to the predictor class we create, fit the training data to it, and then save the model. It then evaluate the precision recall f1-score on the constrained and unconstrained datasets and print out predictions to make sure result looks correct.
+
+
 - `load_store_data.py`
 
 |Function|Parameters|Return|Description|
 |--------|----------|------|-----------|
-|||||
+|load_dataset_from_file|(filename,<br> categories):<br>(str, <br> numpy.ndarray)|(group_ix,<br> tokens,<br> features,<br> labels):<br>(list,<br> numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray)|load dataset from file to arrays needed for prediction||
+|load_dataset|(tweet_ix,<br> ix,<br> tokens,<br> features,<br> labels,<br> categories):<br>(numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray)|(group_ix,<br> tokens,<br> features,<br> labels):<br>(list,<br> numpy.ndarray,<br> numpy.ndarray,<br> numpy.ndarray)|load dataset from various part to arrays needed for prediction||
+|save_model|(model, <br> file_name):<br>(Predictor, <br> str)|None|save model to file specified||
+|load_model|(file_name):<br>(str)|(model):<br>(Predictor)|load model from file specified||
+
 
 #### Frontend
 - `normalize_tweets.py`
